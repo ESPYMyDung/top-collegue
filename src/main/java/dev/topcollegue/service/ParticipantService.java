@@ -1,9 +1,11 @@
 package dev.topcollegue.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,9 +17,13 @@ import dev.topcollegue.entite.ParticipantRepository;
 @Service
 public class ParticipantService
 {
+	@Value("${jwt.expires_in}")
+	private Integer EXPIRES_IN;
+	@Value("${jwt.cookie}")
+	private String TOKEN_COOKIE;
+	
 	//attribut
 	private ParticipantRepository accesBDD;
-	final String chemin = "http://localhost:8080/collegues";
 	
 	@Autowired //le fameux restTemplate
 	RestTemplate restTemplate;
@@ -43,12 +49,55 @@ public class ParticipantService
 	}
 	
 	//recherche dans collegue si existe
-	public Participant rechercherMatricule(String matricule)
+	public Participant rechercherMatricule(String matricule) //
 	{
+		final String chemin = "http://localhost:8080/collegues"; // collegues   //changer pour la prod
+
+		/*ResponseEntity<CollegueConnecte> result = rt.postForEntity("https://remvia-collegues-api.herokuapp.com/auth", collegueInscription, CollegueConnecte.class);
+
+		String jetonJWT = result.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
+		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
+		// DEFINIE LE COOKIE ET PERMET DE LE TRANSMETTRE
+		authCookie.setHttpOnly(true);
+		authCookie.setMaxAge(EXPIRES_IN * 1000);
+		authCookie.setPath("/");
+		response.addCookie(authCookie);
+
+		RequestEntity<?> requestEntity = RequestEntity.get(new URI("https://remvia-collegues-api.herokuapp.com/me"))
+				.header("Cookie", result.getHeaders().getFirst("Set-Cookie")).build();
+
+		ResponseEntity<CollegueConnecte> rep2 = rt.exchange(requestEntity, CollegueConnecte.class);
+		return ResponseEntity.ok(rep2.getBody());*/
+		
+		
+		// chat chez mois
 		ResponseEntity<ModelCollegue> response = restTemplate.getForEntity(chemin + "/"+matricule, ModelCollegue.class);
 		ModelCollegue tmp = response.getBody();
 		
-		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), tmp.getMotDePasse(), tmp.getPhotoUrl());
+		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), tmp.getMotDePasse(), tmp.getPhotoUrl(), tmp.getRoles());
+		
+		/*
+		//nouvelle version avec cookies
+		ResponseEntity<InfosAuthentification> response = restTemplate.postForEntity(chemin + "/auth", auth, InfosAuthentification.class);
+		//on recupere le bazard
+		String jetonJWT = response.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
+		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
+		// DEFINIE LE COOKIE ET PERMET DE LE TRANSMETTRE
+		authCookie.setHttpOnly(true);
+		authCookie.setMaxAge(EXPIRES_IN * 1000);
+		authCookie.setPath("/");
+		//response.addCookie(authCookie);
+		
+		ResponseEntity<?> resObjet = RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", response.getHeaders().getFirst("Set-Cookie")).build();*/
+		//ModelCollegue tmp = response.getBody();
+
+		//ModelCollegue tmp = response.getBody();
+		
+		
+		
+		
+		
+		
 		return pers;
 	}
 	
@@ -68,6 +117,34 @@ public class ParticipantService
 			pers.setScore(nvScore);
 			accesBDD.save(pers);
 		}
+	}
+	
+	public List<Participant> classementParticipant(List<Participant> liste)
+	{
+		List<Participant> out = new ArrayList<>();
+		while (!liste.isEmpty())
+		{
+			Participant tmp = scoreMax(liste);
+			out.add( scoreMax(liste) );
+			liste.remove(tmp);
+		}
+
+		return out;
+	}
+	
+	public Participant scoreMax(List<Participant> liste)
+	{
+		int max = liste.get(0).getScore();
+		Participant out = null;
+		for (Participant el:liste)
+		{
+			if (max<el.getScore())
+				{ max = el.getScore(); 
+				out = el;}
+		}
+		
+		return out;
+		
 	}
 	
 

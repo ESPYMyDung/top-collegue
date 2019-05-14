@@ -1,7 +1,11 @@
 package dev.topcollegue.entite;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 
 @Entity
@@ -20,28 +24,33 @@ public class Participant
 	@Column
 	private String photoUrl;
 	@Column
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<Role> authorites;
+	@Column
 	private int score;
 
 	// - constructeur - 
 	public Participant() {}
-	
-	public Participant(String matricule, String nom, String prenom, String motPass, String photoUrl)
+
+	public Participant(String matricule, String nom, String prenom, String motPass, String photoUrl, List<Role> authorites)
 	{
 		this.matricule = matricule;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.motDePasse = motPass;
 		this.photoUrl = photoUrl;
+		this.setRoles(authorites);
 		this.setScore(0);
 	}
 	//utiliser uniquement pour mettre des donnes dans la bdd
-	public Participant(String matricule, String nom, String prenom, String motPass, String photoUrl, int score)
+	public Participant(String matricule, String nom, String prenom, String motPass, String photoUrl,List<Role> authorites, int score)
 	{
 		this.matricule = matricule;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.motDePasse = motPass;
 		this.photoUrl = photoUrl;
+		this.setRoles(authorites);
 		this.score = score;
 	}
 	
@@ -64,6 +73,9 @@ public class Participant
 	
 	public String getPhotoUrl() {
 		return photoUrl;
+	}
+	public List<Role> getRoles() {
+		return authorites;
 	}
 	
 	public int getScore() {
@@ -89,6 +101,10 @@ public class Participant
 
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
+	}
+	
+	public void setRoles(List<Role> authorites) {
+		this.authorites = authorites;
 	}
 	
 	public void setScore(int score) {

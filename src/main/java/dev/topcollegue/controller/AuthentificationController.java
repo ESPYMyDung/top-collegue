@@ -1,6 +1,9 @@
 package dev.topcollegue.controller;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -50,14 +53,14 @@ public class AuthentificationController
 
 		User user = (User) authentication.getPrincipal();
 
-		//String rolesList = user.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining(","));
+		String rolesList = user.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining(","));
 
-		//Map<String, Object> infosSupplementaireToken = new HashMap<>();
-		//infosSupplementaireToken.put("roles", rolesList);
+		Map<String, Object> infosSupplementaireToken = new HashMap<>();
+		infosSupplementaireToken.put("roles", rolesList);
 
 		String jetonJWT = Jwts.builder()
 				.setSubject(user.getUsername())
-				//.addClaims(infosSupplementaireToken)
+				.addClaims(infosSupplementaireToken)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRES_IN * 1000))
 				.signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET)
 				.compact();
@@ -80,3 +83,7 @@ public class AuthentificationController
 	}
 
 }
+
+
+/*
+		*/

@@ -1,5 +1,8 @@
 package dev.topcollegue.service;
 
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import dev.topcollegue.entite.Participant;
 import dev.topcollegue.entite.ParticipantRepository;
+import dev.topcollegue.entite.Role;
 
 @Service
 public class UtilisateurService implements UserDetailsService
@@ -32,7 +36,7 @@ public class UtilisateurService implements UserDetailsService
 
 
 		// Création d'un objet User (implémentant UserDetails)
-		return new User(utilisateurTrouve.getMatricule(), utilisateurTrouve.getMotDePasse(), null);
+		return new User(utilisateurTrouve.getMatricule(), utilisateurTrouve.getMotDePasse(), utilisateurTrouve.getRoles().stream().map(Role::name).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
 	}
 

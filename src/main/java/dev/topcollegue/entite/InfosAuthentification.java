@@ -6,6 +6,7 @@ public class InfosAuthentification
 	//attribut
 	private String matriculeColl;
 	private String motDePasse;
+	//private String PhotoUrl;
 
 	//getter
 	public String getMatriculeColl() {
@@ -15,6 +16,10 @@ public class InfosAuthentification
 	public String getMotDePasse() {
 		return motDePasse;
 	}
+	
+	/*public String getPhotoUrl() {
+		return PhotoUrl;
+	}*/
 
 	//setter
 	public void setMatriculeColl(String matricule) {
@@ -24,4 +29,8 @@ public class InfosAuthentification
 	public void setMotDePasse(String motDePasse) {
 		this.motDePasse = motDePasse;
 	}
+
+	/*public void setPhotoUrl(String photoUrl) {
+		PhotoUrl = photoUrl;
+	}*/
 }

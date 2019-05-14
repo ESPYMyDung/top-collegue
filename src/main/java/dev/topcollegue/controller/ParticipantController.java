@@ -1,5 +1,6 @@
 package dev.topcollegue.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,28 @@ public class ParticipantController
 	@Autowired
 	private ParticipantService servPart;
 
-	
 	//recherche participant
-	@GetMapping(path = "/{matricule}") //, produces = MediaType.APPLICATION_JSON_VALUE
-	public Participant verifierParticipantMatricule (@PathVariable String matricule) // ,  Optional<Participant> part | throws CollegueNonTrouveException
+	@GetMapping(path = "/{matricule}")
+	public Participant verifierParticipantMatricule (@PathVariable String matricule)
 	{
 		Optional<Participant> tmp = servPart.rechercherParMatricule(matricule);
 		if (tmp.isPresent())
 			{ return tmp.get(); }
 		else
-		{
-			Participant pers = servPart.rechercherMatricule(matricule);
-			return pers;
-		}
-
+		{ return servPart.rechercherMatricule(matricule); }
+	}
+	
+	@GetMapping(path = "/vote")
+	public List<Participant> afficherParticipant()
+	{
+		return servPart.listerParticipant();
+	}
+	
+	@GetMapping(path = "/classement")
+	public List<Participant> afficherClassement()
+	{
+		List<Participant> tmp = servPart.listerParticipant();
+		return servPart.classementParticipant(tmp);
 	}
 		
 	//ajout participant
@@ -49,7 +58,7 @@ public class ParticipantController
 	
 	
 	//modification score
-	@PatchMapping(path = "/{matricule}")
+	@PatchMapping(path = "/vote")
 	public void changerScore (@PathVariable String matricule, @RequestBody ParticipantScore pers)  
 	{		
 		servPart.modifierScore(matricule, pers.getScore());
