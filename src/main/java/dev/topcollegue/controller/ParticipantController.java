@@ -50,7 +50,7 @@ public class ParticipantController
 	}
 		
 	//ajout participant
-	@PostMapping(path = "/{matricule}")
+	@PostMapping() //path = "/{matricule}"
 	public void creerParticipant(@RequestBody Participant pers)  //throws CollegueInvalideException
 	{
 		servPart.ajouterUnParticipant(pers);

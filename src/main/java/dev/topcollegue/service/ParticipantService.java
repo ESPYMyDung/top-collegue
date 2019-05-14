@@ -93,11 +93,6 @@ public class ParticipantService
 
 		//ModelCollegue tmp = response.getBody();
 		
-		
-		
-		
-		
-		
 		return pers;
 	}
 	
@@ -125,7 +120,7 @@ public class ParticipantService
 		while (!liste.isEmpty())
 		{
 			Participant tmp = scoreMax(liste);
-			out.add( scoreMax(liste) );
+			out.add(tmp);
 			liste.remove(tmp);
 		}
 
@@ -135,7 +130,7 @@ public class ParticipantService
 	public Participant scoreMax(List<Participant> liste)
 	{
 		int max = liste.get(0).getScore();
-		Participant out = null;
+		Participant out = liste.get(0);
 		for (Participant el:liste)
 		{
 			if (max<el.getScore())
