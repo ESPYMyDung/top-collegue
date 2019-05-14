@@ -51,8 +51,8 @@ public class ParticipantService
 	//recherche dans collegue si existe
 	public Participant rechercherMatricule(String matricule) //
 	{
-		final String chemin = "http://localhost:8080/collegues"; // collegues   //changer pour la prod
-
+		final String chemin = "https://espy-collegues-api.herokuapp.com/collegues"; // local : http://localhost:8080/collegues
+		
 		/*ResponseEntity<CollegueConnecte> result = rt.postForEntity("https://remvia-collegues-api.herokuapp.com/auth", collegueInscription, CollegueConnecte.class);
 
 		String jetonJWT = result.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
