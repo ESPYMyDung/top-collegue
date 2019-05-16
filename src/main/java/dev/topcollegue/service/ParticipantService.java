@@ -6,11 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import dev.topcollegue.entite.ModelCollegue;
 import dev.topcollegue.entite.Participant;
 import dev.topcollegue.entite.ParticipantRepository;
 
@@ -49,9 +47,9 @@ public class ParticipantService
 	}
 	
 	//recherche dans collegue si existe
-	public Participant rechercherMatricule(String matricule) //
+	/*public Participant rechercherMatricule(String matricule) // InfosAuthentification auth
 	{
-		final String chemin = "https://espy-collegues-api.herokuapp.com/collegues"; // local : http://localhost:8080/collegues
+		final String chemin = "https://espy-collegues-api.herokuapp.com"; // local : http://localhost:8080/collegues
 		
 		/*ResponseEntity<CollegueConnecte> result = rt.postForEntity("https://remvia-collegues-api.herokuapp.com/auth", collegueInscription, CollegueConnecte.class);
 
@@ -67,7 +65,7 @@ public class ParticipantService
 				.header("Cookie", result.getHeaders().getFirst("Set-Cookie")).build();
 
 		ResponseEntity<CollegueConnecte> rep2 = rt.exchange(requestEntity, CollegueConnecte.class);
-		return ResponseEntity.ok(rep2.getBody());*/
+		return ResponseEntity.ok(rep2.getBody()); //
 		
 		
 		// chat chez mois
@@ -76,9 +74,9 @@ public class ParticipantService
 		
 		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), tmp.getMotDePasse(), tmp.getPhotoUrl(), tmp.getRoles());
 		
-		/*
+		
 		//nouvelle version avec cookies
-		ResponseEntity<InfosAuthentification> response = restTemplate.postForEntity(chemin + "/auth", auth, InfosAuthentification.class);
+		/*ResponseEntity<?> response = restTemplate.postForEntity(chemin + "/auth", auth, InfosAuthentification.class);
 		//on recupere le bazard
 		String jetonJWT = response.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
 		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
@@ -88,17 +86,19 @@ public class ParticipantService
 		authCookie.setPath("/");
 		//response.addCookie(authCookie);
 		
-		ResponseEntity<?> resObjet = RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", response.getHeaders().getFirst("Set-Cookie")).build();*/
-		//ModelCollegue tmp = response.getBody();
-
-		//ModelCollegue tmp = response.getBody();
+		ResponseEntity<?> resColl = RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", response.getHeaders().getFirst("Set-Cookie")).build();
+		
+		ResponseEntity<ModelCollegue> reponse = restTemplate.exchange(resColl, ModelCollegue.class);
+		ModelCollegue tmp = reponse.getBody();
+		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), tmp.getMotDePasse(), tmp.getPhotoUrl(), tmp.getRoles()); //
 		
 		return pers;
-	}
+	}*/
 	
 	// ajoute dans bdd
 	public void ajouterUnParticipant(Participant participantAAjouter)
 	{
+		
 			accesBDD.save(participantAAjouter);
 	}
 	

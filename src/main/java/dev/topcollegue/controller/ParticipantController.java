@@ -1,7 +1,6 @@
 package dev.topcollegue.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +25,7 @@ public class ParticipantController
 	private ParticipantService servPart;
 
 	//recherche participant
-	@GetMapping(path = "/{matricule}")
+	/*@GetMapping(path = "/{matricule}")
 	public Participant verifierParticipantMatricule (@PathVariable String matricule)
 	{
 		Optional<Participant> tmp = servPart.rechercherParMatricule(matricule);
@@ -34,7 +33,7 @@ public class ParticipantController
 			{ return tmp.get(); }
 		else
 		{ return servPart.rechercherMatricule(matricule); }
-	}
+	}*/
 	
 	@GetMapping(path = "/vote")
 	public List<Participant> afficherParticipant()

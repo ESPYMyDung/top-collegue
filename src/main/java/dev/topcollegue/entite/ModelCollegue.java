@@ -13,7 +13,7 @@ public class ModelCollegue
 	private LocalDate dateDeNaissance;
 	private String photoUrl;
 	//private Set<Note> notes;
-	private String motDePasse;
+	//private String motDePasse;
 	private List<Role> authorites;
 
 	//constructeur
@@ -47,11 +47,11 @@ public class ModelCollegue
 
 	/*public Set<Note> getNotes() {
 		return notes;
-	}*/
+	}
 
 	public String getMotDePasse() {
 		return motDePasse;
-	}
+	}*/
 
 	public List<Role> getRoles() {
 		return authorites;
@@ -84,11 +84,11 @@ public class ModelCollegue
 
 	/*public void setNotes(Set<Note> tmp) {
 		this.notes = tmp;
-	}*/
+	}
 
 	public void setMotDePasse(String motDePasse) {
 		this.motDePasse = motDePasse;
-	}
+	}*/
 
 	public void setRoles(List<Role> authorites) {
 		this.authorites = authorites;
