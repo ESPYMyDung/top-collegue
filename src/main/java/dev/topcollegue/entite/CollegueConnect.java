@@ -1,23 +1,22 @@
 package dev.topcollegue.entite;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public class ModelCollegue
+public class CollegueConnect
 {
 	//attribut
 	private String matricule;
 	private String nom;
 	private String prenoms;
-	private String email;
-	private LocalDate dateDeNaissance;
+	//private String email;
+	//private LocalDate dateDeNaissance;
 	private String photoUrl;
 	//private Set<Note> notes;
 	//private String motDePasse;
 	private List<Role> authorites;
 
 	//constructeur
-	public ModelCollegue() {}
+	public CollegueConnect() {}
 
 
 	//getter
@@ -33,13 +32,13 @@ public class ModelCollegue
 		return prenoms;
 	}
 
-	public String getEmail() {
+	/*public String getEmail() {
 		return email;
 	}
 
 	public LocalDate getDateDeNaissance() {
 		return dateDeNaissance;
-	}
+	}*/
 
 	public String getPhotoUrl() {
 		return photoUrl;
@@ -70,13 +69,13 @@ public class ModelCollegue
 		this.prenoms = prenoms;
 	}
 
-	public void setEmail(String email) {
+	/*public void setEmail(String email) {
 		this.email = email;
 	}
 
 	public void setDateDeNaissance(String dateDeNaissance) {
 		this.dateDeNaissance = LocalDate.parse(dateDeNaissance);
-	}
+	}*/
 
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;

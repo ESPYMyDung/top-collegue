@@ -23,7 +23,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import dev.topcollegue.entite.InfosAuthentification;
-import dev.topcollegue.entite.ModelCollegue;
+import dev.topcollegue.entite.CollegueConnect;
 import dev.topcollegue.entite.Participant;
 import dev.topcollegue.service.ParticipantService;
 
@@ -42,8 +42,8 @@ public class AuthentificationController
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	//@Autowired //le fameux restTemplate
-	RestTemplate restTemplate = new RestTemplate();
+	@Autowired //le fameux restTemplate
+	RestTemplate restTemplate; //= new RestTemplate()
 	
 	@Autowired
 	private ParticipantService servPart;
@@ -54,24 +54,13 @@ public class AuthentificationController
 		// encapsulation des informations de connexion
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(authenticationRequest.getMatriculeColl(), authenticationRequest.getMotDePasse());
 
-		final String chemin = "https://espy-collegues-api.herokuapp.com"; // https://espy-collegues-api.herokuapp.com   http://localhost:8080/collegues
+		final String chemin = "http://localhost:8080"; // https://espy-collegues-api.herokuapp.com   http://localhost:8080/collegues
 		
 		System.out.println("debut catch");
 		
 		ResponseEntity<?> resAuth= restTemplate.postForEntity(chemin + "/auth", authenticationRequest, InfosAuthentification.class);
 		//on recupere le bazard
 		String jetonJWT = resAuth.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
-		
-		
-		System.out.println("get");
-		// header(blabla) pour recupere et stocker le cookie; et .build pour ne pas mettre de body
-		RequestEntity<?> resColl = RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", resAuth.getHeaders().getFirst("Set-Cookie")).build();
-		//RequestEntity<?> resColl = RequestEntity.getForEntity(new URI(chemin + "/me") ).header("Cookie", resAuth.getHeaders().getFirst("Set-Cookie")).build();
-
-		//recupere le collegue, en theorie
-		System.out.println("coll");
-		ResponseEntity<ModelCollegue> raiponce = restTemplate.exchange(RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", resAuth.getHeaders().getFirst("Set-Cookie")).build()
-				, ModelCollegue.class); //restTemplate.exchange(resColl, ModelCollegue.class);
 		
 		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
 		// cree le cookie de l'appli top-collegue
@@ -80,8 +69,18 @@ public class AuthentificationController
 		authCookie.setPath("/");
 		response.addCookie(authCookie);
 		
+		
+		System.out.println("get");
+		// header(blabla) pour recupere et stocker le cookie; et .build pour ne pas mettre de body
+		RequestEntity<?> resColl = RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", resAuth.getHeaders().getFirst("Set-Cookie")).build();
+									//RequestEntity.get(new URI("https://remvia-collegues-api.herokuapp.com/me")).header("Cookie", result.getHeaders().getFirst("Set-Cookie")).build();
+
+		//recupere le collegue, en theorie
+		System.out.println("coll");
+		ResponseEntity<CollegueConnect> raiponce = restTemplate.exchange(resColl, CollegueConnect.class);
+
 		System.out.println("get body");
-		ModelCollegue tmp = raiponce.getBody();
+		CollegueConnect tmp = raiponce.getBody();
 		
 		System.out.println("creation");
 		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), authenticationRequest.getMatriculeColl(), tmp.getPhotoUrl(), tmp.getRoles());
