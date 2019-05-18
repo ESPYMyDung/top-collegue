@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-//@ComponentScan("dev.colleguesapi.entite")
 public class RestConfiguration
 {
 	@Bean

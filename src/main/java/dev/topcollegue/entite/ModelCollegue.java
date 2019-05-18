@@ -1,6 +1,5 @@
 package dev.topcollegue.entite;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class ModelCollegue
@@ -9,11 +8,7 @@ public class ModelCollegue
 	private String matricule;
 	private String nom;
 	private String prenoms;
-	private String email;
-	private LocalDate dateDeNaissance;
 	private String photoUrl;
-	//private Set<Note> notes;
-	//private String motDePasse;
 	private List<Role> authorites;
 
 	//constructeur
@@ -33,25 +28,9 @@ public class ModelCollegue
 		return prenoms;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public LocalDate getDateDeNaissance() {
-		return dateDeNaissance;
-	}
-
 	public String getPhotoUrl() {
 		return photoUrl;
 	}
-
-	/*public Set<Note> getNotes() {
-		return notes;
-	}
-
-	public String getMotDePasse() {
-		return motDePasse;
-	}*/
 
 	public List<Role> getRoles() {
 		return authorites;
@@ -70,25 +49,9 @@ public class ModelCollegue
 		this.prenoms = prenoms;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setDateDeNaissance(String dateDeNaissance) {
-		this.dateDeNaissance = LocalDate.parse(dateDeNaissance);
-	}
-
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
 	}
-
-	/*public void setNotes(Set<Note> tmp) {
-		this.notes = tmp;
-	}
-
-	public void setMotDePasse(String motDePasse) {
-		this.motDePasse = motDePasse;
-	}*/
 
 	public void setRoles(List<Role> authorites) {
 		this.authorites = authorites;

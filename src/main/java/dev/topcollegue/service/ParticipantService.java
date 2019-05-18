@@ -5,21 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import dev.topcollegue.entite.Participant;
 import dev.topcollegue.entite.ParticipantRepository;
+import dev.topcollegue.entite.Vote;
 
 @Service
 public class ParticipantService
-{
-	@Value("${jwt.expires_in}")
-	private Integer EXPIRES_IN;
-	@Value("${jwt.cookie}")
-	private String TOKEN_COOKIE;
-	
+{	
 	//attribut
 	private ParticipantRepository accesBDD;
 	
@@ -46,55 +41,6 @@ public class ParticipantService
 		 return accesBDD.findById(matriculeRecherche);
 	}
 	
-	//recherche dans collegue si existe
-	/*public Participant rechercherMatricule(String matricule) // InfosAuthentification auth
-	{
-		final String chemin = "https://espy-collegues-api.herokuapp.com"; // local : http://localhost:8080/collegues
-		
-		/*ResponseEntity<CollegueConnecte> result = rt.postForEntity("https://remvia-collegues-api.herokuapp.com/auth", collegueInscription, CollegueConnecte.class);
-
-		String jetonJWT = result.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
-		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
-		// DEFINIE LE COOKIE ET PERMET DE LE TRANSMETTRE
-		authCookie.setHttpOnly(true);
-		authCookie.setMaxAge(EXPIRES_IN * 1000);
-		authCookie.setPath("/");
-		response.addCookie(authCookie);
-
-		RequestEntity<?> requestEntity = RequestEntity.get(new URI("https://remvia-collegues-api.herokuapp.com/me"))
-				.header("Cookie", result.getHeaders().getFirst("Set-Cookie")).build();
-
-		ResponseEntity<CollegueConnecte> rep2 = rt.exchange(requestEntity, CollegueConnecte.class);
-		return ResponseEntity.ok(rep2.getBody()); //
-		
-		
-		// chat chez mois
-		ResponseEntity<ModelCollegue> response = restTemplate.getForEntity(chemin + "/"+matricule, ModelCollegue.class);
-		ModelCollegue tmp = response.getBody();
-		
-		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), tmp.getMotDePasse(), tmp.getPhotoUrl(), tmp.getRoles());
-		
-		
-		//nouvelle version avec cookies
-		/*ResponseEntity<?> response = restTemplate.postForEntity(chemin + "/auth", auth, InfosAuthentification.class);
-		//on recupere le bazard
-		String jetonJWT = response.getHeaders().getFirst("Set-Cookie").split(";")[0].split("=")[1];
-		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
-		// DEFINIE LE COOKIE ET PERMET DE LE TRANSMETTRE
-		authCookie.setHttpOnly(true);
-		authCookie.setMaxAge(EXPIRES_IN * 1000);
-		authCookie.setPath("/");
-		//response.addCookie(authCookie);
-		
-		ResponseEntity<?> resColl = RequestEntity.get(new URI(chemin + "/me") ).header("Cookie", response.getHeaders().getFirst("Set-Cookie")).build();
-		
-		ResponseEntity<ModelCollegue> reponse = restTemplate.exchange(resColl, ModelCollegue.class);
-		ModelCollegue tmp = reponse.getBody();
-		Participant pers = new Participant(tmp.getMatricule(), tmp.getNom(), tmp.getPrenoms(), tmp.getMotDePasse(), tmp.getPhotoUrl(), tmp.getRoles()); //
-		
-		return pers;
-	}*/
-	
 	// ajoute dans bdd
 	public void ajouterUnParticipant(Participant participantAAjouter)
 	{
@@ -103,13 +49,17 @@ public class ParticipantService
 	}
 	
 	//modification du score
-	public void modifierScore(String matricule, int nvScore)
+	public void modifierScore(Vote bulletin)
 	{
-		Optional<Participant> tmp = rechercherParMatricule(matricule);
+		Optional<Participant> tmp = rechercherParMatricule(bulletin.getMatriculeColl());
 		if (tmp.isPresent())
 		{ 
 			Participant pers = tmp.get();
-			pers.setScore(nvScore);
+			if (bulletin.getVote())
+			{ pers.votePlus(); }
+			else
+			{  pers.voteMoins(); }
+
 			accesBDD.save(pers);
 		}
 	}

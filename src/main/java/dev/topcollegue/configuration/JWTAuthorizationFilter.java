@@ -40,8 +40,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter
 
 				String username = body.getSubject();
 
-				//List<SimpleGrantedAuthority> roles = Stream.of(body.get("roles", String.class).split(",")).map(roleString -> new SimpleGrantedAuthority(roleString)).collect(Collectors.toList());
-
 				Authentication authentication =  new UsernamePasswordAuthenticationToken(username, null, null);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 

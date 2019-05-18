@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.topcollegue.entite.Participant;
 import dev.topcollegue.entite.ParticipantScore;
+import dev.topcollegue.entite.Vote;
 import dev.topcollegue.service.ParticipantService;
 
 @RestController
@@ -24,17 +25,6 @@ public class ParticipantController
 	@Autowired
 	private ParticipantService servPart;
 
-	//recherche participant
-	/*@GetMapping(path = "/{matricule}")
-	public Participant verifierParticipantMatricule (@PathVariable String matricule)
-	{
-		Optional<Participant> tmp = servPart.rechercherParMatricule(matricule);
-		if (tmp.isPresent())
-			{ return tmp.get(); }
-		else
-		{ return servPart.rechercherMatricule(matricule); }
-	}*/
-	
 	@GetMapping(path = "/vote")
 	public List<Participant> afficherParticipant()
 	{
@@ -49,18 +39,17 @@ public class ParticipantController
 	}
 		
 	//ajout participant
-	@PostMapping() //path = "/{matricule}"
-	public void creerParticipant(@RequestBody Participant pers)  //throws CollegueInvalideException
+	@PostMapping()
+	public void creerParticipant(@RequestBody Participant pers)
 	{
 		servPart.ajouterUnParticipant(pers);
 	}
-	
-	
+
 	//modification score
-	@PatchMapping(path = "/vote")
-	public void changerScore (@PathVariable String matricule, @RequestBody ParticipantScore pers)  
+	@PostMapping(path = "/vote")
+	public void changerScore(@RequestBody Vote bulletin)  
 	{		
-		servPart.modifierScore(matricule, pers.getScore());
+		servPart.modifierScore(bulletin);
 	}
 
 

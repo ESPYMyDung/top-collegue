@@ -54,6 +54,13 @@ public class Participant
 		this.score = score;
 	}
 	
+	//methode
+	public void votePlus()
+	{ this.score += 1;}
+	
+	public void voteMoins()
+	{ this.score -= 1;}
+	
 	// - getter - 
 	public String getMatricule() {
 		return matricule;

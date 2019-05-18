@@ -5,9 +5,7 @@ public class ParticipantScore
 	//attribut
 	private String matricule;
 	private int score;
-	
-	
-	
+
 	//getter
 	public String getMatricule() {
 		return matricule;
